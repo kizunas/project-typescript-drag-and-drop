@@ -2,6 +2,9 @@ class ProjectInput {
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement;
   element: HTMLFormElement;
+  titleInputElement: HTMLInputElement;
+  descriptionInputElement: HTMLInputElement;
+  mandayInputElement: HTMLInputElement;
 
   constructor() {
     this.templateElement = document.getElementById('project-input')! as HTMLTemplateElement; // テンプレート要素への参照
@@ -15,7 +18,24 @@ class ProjectInput {
     const importedNode = document.importNode(this.templateElement.content, true)
     this.element = importedNode.firstElementChild as HTMLFormElement; // formタグを指す
     this.element.id = 'user-input'; // cssのuser-inputを当てる
+
+    // formへの入力項目を取得する。
+    this.titleInputElement = this.element.querySelector('#title') as HTMLInputElement;
+    this.descriptionInputElement = this.element.querySelector('#description') as HTMLInputElement;
+    this.mandayInputElement = this.element.querySelector('#mandaye') as HTMLInputElement;
+
+    this.configure();
     this.attach();
+  }
+
+  private submitHundler(event: Event) {
+    event.preventDefault(); // Http requestが送られないように
+    console.log(this.titleInputElement.value);
+  }
+
+  private configure() {
+    // bind(this)でsubmitHundler内でthisを使えるようにしている。
+    this.element.addEventListener('submit', this.submitHundler.bind(this))
   }
 
   private attach() { // hostElementに要素を追加する。
