@@ -14,7 +14,8 @@ class ProjectInput {
     // importNodeの第二引数はhtmlタグの最初の階層だけではなく、その下の階層も含めてインポートするというもの
     const importedNode = document.importNode(this.templateElement.content, true)
     this.element = importedNode.firstElementChild as HTMLFormElement; // formタグを指す
-    this.attach()
+    this.element.id = 'user-input'; // cssのuser-inputを当てる
+    this.attach();
   }
 
   private attach() { // hostElementに要素を追加する。
@@ -22,7 +23,7 @@ class ProjectInput {
     // 最初の引数はどこに追加するかのオプション。
     // afterbeginは開始タグの後ろ、afterendは終了タグの後ろ、beforebeginは開始タグの前、beforeendは終了タグの前。
     // 第二引数に挿入したい要素を渡す
-    this.hostElement.insertAdjacentElement('afterbegin', this.element)
+    this.hostElement.insertAdjacentElement('afterbegin', this.element);
   }
 }
 
