@@ -1,3 +1,18 @@
+// autobind decorator
+function autobind(_: any, _2: string, descriptor: PropertyDescriptor) { // decoratorは関数
+  const originalMethod = descriptor.value;
+  const adjDescriptor: PropertyDescriptor = {
+    configurable: true,
+    get() {
+      const boundFn = originalMethod.bind(this)
+      return boundFn;
+    }
+  }
+  return adjDescriptor;
+}
+
+
+// ProjectInput class
 class ProjectInput {
   templateElement: HTMLTemplateElement;
   hostElement: HTMLDivElement;
@@ -28,14 +43,14 @@ class ProjectInput {
     this.attach();
   }
 
+  @autobind
   private submitHundler(event: Event) {
     event.preventDefault(); // Http requestが送られないように
     console.log(this.titleInputElement.value);
   }
 
   private configure() {
-    // bind(this)でsubmitHundler内でthisを使えるようにしている。
-    this.element.addEventListener('submit', this.submitHundler.bind(this))
+    this.element.addEventListener('submit', this.submitHundler)
   }
 
   private attach() { // hostElementに要素を追加する。
