@@ -37,16 +37,40 @@ class ProjectInput {
     // formへの入力項目を取得する。
     this.titleInputElement = this.element.querySelector('#title') as HTMLInputElement;
     this.descriptionInputElement = this.element.querySelector('#description') as HTMLInputElement;
-    this.mandayInputElement = this.element.querySelector('#mandaye') as HTMLInputElement;
+    this.mandayInputElement = this.element.querySelector('#manday') as HTMLInputElement;
 
     this.configure();
     this.attach();
   }
 
+  private gatherUserInput(): [string, string, number] | void {
+    const enteredTitle = this.titleInputElement.value;
+    const enteredDescription = this.descriptionInputElement.value;
+    const enteredManday = this.mandayInputElement.value;
+    if (enteredTitle.trim().length === 0 || enteredDescription.trim().length === 0 || enteredManday.trim().length === 0) {
+      alert('入力値が正しくありません。再度お試しください。');
+      return;
+    } else {
+      // +をつけることでNumberに変換している。
+      return [enteredTitle, enteredDescription, +enteredManday]
+    }
+  }
+  
+  private clearInputs() {
+    this.titleInputElement.value = '';
+    this.descriptionInputElement.value = '';
+    this.mandayInputElement.value = '';
+  }
+
   @autobind
   private submitHundler(event: Event) {
     event.preventDefault(); // Http requestが送られないように
-    console.log(this.titleInputElement.value);
+    const userInput = this.gatherUserInput()
+    if (Array.isArray(userInput)) {
+      const [title, desc, manday] = userInput;
+      console.log(title, desc, manday);
+      this.clearInputs();
+    }
   }
 
   private configure() {
