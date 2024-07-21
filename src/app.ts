@@ -179,7 +179,13 @@ class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements 
 
   @autobind
   dragStartHandler(event: DragEvent) {
-    console.log(event);
+    // 引数eventにはdataTransferというプロパティがある。
+    // setDataというメソッドでデータを設定できる。
+    // dropしたときにこの設定したデータを取得できる。
+    // テキストのdragはtext/plain型を使用
+    event.dataTransfer!.setData('text/plain', this.project.id);
+    // ブラウザ上のカーソルがどのように表示されるかをコントロールするもの
+    event.dataTransfer!.effectAllowed = 'move';
   }
 
   dragEndHandler(_: DragEvent) {
@@ -212,13 +218,18 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> implements Drag
   }
 
   @autobind
-  dragOverHandler(_: DragEvent) {
-    const listEl = this.element.querySelector('ul')!;
-    listEl.classList.add('droppable');
+  dragOverHandler(event: DragEvent) {
+    if (event.dataTransfer && event.dataTransfer.types[0] === 'text/plain') {
+      // event.preventDefault()により、ユーザーがdropしたときにdropHandlerが呼び出される
+      event.preventDefault();
+      const listEl = this.element.querySelector('ul')!;
+      listEl.classList.add('droppable');
+    }
   }
 
-  dropHandler(_: DragEvent) {
-      
+  dropHandler(event: DragEvent) {
+    // getDataで値を取得できる。
+    console.log(event.dataTransfer!.getData('text/plain'))
   }
 
   @autobind
